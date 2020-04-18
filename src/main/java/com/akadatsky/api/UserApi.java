@@ -2,7 +2,6 @@ package com.akadatsky.api;
 
 import com.akadatsky.model.User;
 import com.akadatsky.util.UserUtil;
-import org.graalvm.compiler.lir.LIRInstruction;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -56,7 +55,7 @@ public class UserApi {
     @Path("/get")
     @Produces(MediaType.TEXT_PLAIN)
     public Response createUserGet(@DefaultValue("unknown") @QueryParam("name") String name,
-                                  @DefaultValue("10")  @QueryParam("age") int age) {
+                                  @DefaultValue("10") @QueryParam("age") int age) {
         String result = String.format("Your params: name = %s, age = %s", name, age);
         return Response.status(Response.Status.OK).entity(result).build();
     }
@@ -75,7 +74,7 @@ public class UserApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUserForm(@FormParam("name") String name, @FormParam("age") int age) {
         User user = new User(name, age);
-        String resultJson = String.format("{result: \"User %s created\"}", user.getName());
+        String resultJson = String.format("{\"result\": \"User %s created\"}", user.getName());
         return Response.status(Response.Status.OK).entity(resultJson).build();
     }
 
