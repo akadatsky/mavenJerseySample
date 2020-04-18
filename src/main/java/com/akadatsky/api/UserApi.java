@@ -27,8 +27,8 @@ public class UserApi {
     @Path("/")
     @Produces(MediaType.APPLICATION_XML)
     public Response getTestUserXml() {
-        String resultJson = UserUtil.toXml(testUser);
-        return Response.status(Response.Status.OK).entity(resultJson).build();
+        String resultXml = UserUtil.toXml(testUser);
+        return Response.status(Response.Status.OK).entity(resultXml).build();
     }
 
     @GET
@@ -41,7 +41,7 @@ public class UserApi {
 
     @GET
     @Path("/not-found")
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getTestUserNotFound() {
         String resultJson = "{}";
         return Response
@@ -51,7 +51,7 @@ public class UserApi {
                 .build();
     }
 
-    // http://test.com/user&name=Alex&age=22
+    // http://127.0.0.1:12345/my-api/user/get?age=55&name=alex
     @GET
     @Path("/get")
     @Produces(MediaType.TEXT_PLAIN)
@@ -63,7 +63,7 @@ public class UserApi {
 
     @GET
     @Path("/{name}/{age}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response createUserPath(@PathParam("name") String name, @PathParam("age") int age) {
         String result = String.format("Your params: name = %s, age = %s", name, age);
         return Response.status(Response.Status.OK).entity(result).build();
@@ -75,14 +75,23 @@ public class UserApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUserForm(@FormParam("name") String name, @FormParam("age") int age) {
         User user = new User(name, age);
-        String resultJson = String.format("{result: \"User %s created\"}", user.getName());
+        String resultJson = String.format("{\"result\": \"User %s created\"}", user.getName());
         return Response.status(Response.Status.OK).entity(resultJson).build();
     }
 
+    @POST
+    @Path("/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createUserJson(String body) {
+        User user = UserUtil.fromJson(body);
+        String resultJson = String.format("{\"result\": \"User %s created\"}", user.getName());
+        return Response.status(Response.Status.OK).entity(resultJson).build();
+    }
+
+
+
 //    Header =  `token: 123456` =>
 //    myMethod(@HeaderParam("token") String token)
-
-//    myMethod(String json)
-
 
 }
